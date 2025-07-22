@@ -204,9 +204,68 @@ class EncodeDecode:
         return decoded_strs
 
             
-obj6 = EncodeDecode()
-print(obj6.encode(["tech", "prep", "is", "op"]))
-print(obj6.decode(obj6.encode(["tech", "prep", "is", "op"])))
+# obj6 = EncodeDecode()
+# print(obj6.encode(["tech", "prep", "is", "op"]))
+# print(obj6.decode(obj6.encode(["tech", "prep", "is", "op"])))
 
-print(obj6.encode(["how", "you", "?", "doing"]))
-print(obj6.decode(obj6.encode(["how", "you", "?", "doing"])))
+# print(obj6.encode(["how", "you", "?", "doing"]))
+# print(obj6.decode(obj6.encode(["how", "you", "?", "doing"])))
+
+
+class FrequentElement:
+    """
+    Given an integer array nums and an integer k, return the k elements that appear most frequently in the array.
+    It is guaranteed that the answer is unique for each test case.
+    You can return the result in any order.
+
+    Example 1:
+    Input: nums = [1,2,3,3,4,4,4], k = 2
+    Output: [3,4]
+
+    Example 2:
+    Input: nums = [6], k = 1
+    Output: [6]
+    """
+    def topKFrequent(self, nums: list[int], k: int) -> list[int]:
+        ### My implementation - time comlexity: O(n/log n) due to sorting
+
+        # countDict = {}
+        # resTuple = ()
+
+        # for num in nums:
+        #     if num not in countDict:
+        #         countDict[num] = 1
+        #     else:
+        #         countDict[num] += 1
+
+        # # get a tuple based on key-val
+        # resTuple = tuple((res, countDict[res]) for res in countDict)
+        # # Sort the result tuple based on the frequency of the element
+        # resTuple = sorted(resTuple, key=lambda x: x[1], reverse=True)
+
+        # # Return first k elements for the value
+        # return [resTuple[i][0] for i in range(k)] 
+
+        ### Recomended implementation - time complexity: O(n) due to bucket sort
+
+        # Create a dictionary and count frequency as value
+        count = {}
+        for num in nums:
+            count[num] = 1 + count.get(num, 0)
+        
+        # Bucket sort: group numbers by frequency
+        freq = [[] for _ in range(len(nums) + 1)]
+        for num, cnt in count.items():
+            freq[cnt].append(num)
+
+        # Compile results: iterate from highest frequency down
+        result = []
+        for i in range(len(freq) -1, 0, -1):
+            for num in freq[i]:
+                result.append(num)
+                if len(result) == k:
+                    return result   
+    
+obj7 = FrequentElement()
+print(obj7.topKFrequent([1,2,3,3,4,4,4], k = 2))
+print(obj7.topKFrequent([6], k = 1))
